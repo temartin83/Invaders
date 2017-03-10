@@ -1,0 +1,118 @@
+﻿<Page
+    x:Name="pageRoot"
+    x:Class="Invaders.View.InvadersGame"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Invaders.View"
+    xmlns:viewmodel="using:Invaders.ViewModel"
+    SizeChanged="pageRoot_SizeChanged"
+    ManipulationMode="TranslateX" ManipulationDelta="pageRoot_ManipulationDelta"
+    ManipulationCompleted="pageRoot_ManipulationCompleted" Tapped="pageRoot_Tapped"
+    xmlns:common="using:Invaders.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <x:String x:Key="AppName">Invaders!</x:String>
+        <viewmodel:InvadersViewModel x:Name="viewModel"/>
+        <viewmodel:BooleanVisibilityConverter x:Name="visibilityConverter"/>
+    </Page.Resources>
+
+    <!--
+        This grid acts as a root panel for the page that defines two rows:
+        * Row 0 contains the back button and page title
+        * Row 1 contains the rest of the page layout
+    -->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" DataContext="{StaticResource viewModel}">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Vertical" Grid.Column="1">
+            <TextBlock Text="{Binding Path=Score}" FontSize="50" />
+            <GridView ItemsSource="{Binding Lives}" HorizontalAlignment="Right" Width="Auto" Height="50"
+                      SelectionMode="None" Margin="0,0,120,0">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="ms-appx:///Assets/player.png" Stretch="Fill" Height="15" Width="20" />
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+        </StackPanel>
+
+        <Border x:Name="playArea" BorderBrush="Blue" BorderThickness="2" CornerRadius="10" Background="Black"
+                Margin="5" Grid.Row="1" Loaded="playArea_Loaded">
+            <ItemsControl ItemsSource="{Binding Path=Sprites}" Margin="5">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="black"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Border>
+
+        <StackPanel Orientation="Vertical" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Visibility="Collapsed" x:Name="gameOverStack">
+            <TextBlock x:Name="gameOverText" Text="Game Over" FontFamily="Bauhaus 93" FontSize="150" 
+                       Foreground="Yellow"/>
+            <Button x:Name="startButton" Click="startButton_Click" FontSize="28" Content="Start Game"
+                    HorizontalAlignment="Center" Background="Black"/>
+        </StackPanel>
+
+        <TextBlock Text="Paused" x:Name="pausedText" Grid.Row="1" VerticalAlignment="Center"
+                   Visibility="{Binding Paused, Converter={StaticResource visibilityConverter}}"
+                   HorizontalAlignment="Center" FontFamily="Bauhaus 93" FontSize="150" Foreground="Yellow"/>
+
+        <Popup x:Name="aboutPopup" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Right"
+               Width="400" IsOpen="False">
+            <StackPanel Background="Blue" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="360"
+                        Margin="20">
+                <StackPanel.Transitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition/>
+                    </TransitionCollection>
+                </StackPanel.Transitions>
+                <StackPanel Height="Auto" Margin="0,10,0,0">
+                    <TextBlock Text="About" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                </StackPanel>
+                <Image Source="ms-appx:///Assets/me.png" Height="200" Margin="0,20,0,0"/>
+                <TextBlock Text="Invaders" FontSize="36" Style="{StaticResource TitleTextBlockStyle}"
+                           Margin="0,15,0,0" HorizontalAlignment="Center"/>
+                <TextBlock Text="Tom Martin" FontSize="20" HorizontalAlignment="Center" Margin="0,15,0,0"/>
+                <TextBlock HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}"
+                           Margin="0,10,0,0">
+                    <Run>Invaders is the final lab from</Run>
+                    <Run FontStyle="Italic">Head First into C# (3rd Edition)</Run>
+                    <Run>By Andrew Stellman and Jennifer Green. This version was developed by Tom Martin
+                    an aspiring program developer.</Run>
+                </TextBlock>
+                <StackPanel Height="Auto" Margin="0,10,0,0">
+                    <AppBarButton Click="ClosePopup" HorizontalAlignment="Center" Icon="ClosePane" Label="Close"/>
+                </StackPanel>
+            </StackPanel>
+        </Popup>
+        <!-- Back button and page title -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                        Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        VerticalAlignment="Top"
+                        AutomationProperties.Name="Back"
+                        AutomationProperties.AutomationId="BackButton"
+                        AutomationProperties.ItemType="Navigation Button"/>
+            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,1029,40"/>
+        </Grid>
+    </Grid>
+</Page>

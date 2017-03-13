@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="aac21888-9551-4437-b4dc-01956406e7d1" Publisher="CN=Tom" Version="1.0.0.0" />
+  <Identity Name="Invaders" Publisher="CN=Tom" Version="1.0.0.0" />
   <Properties>
-    <DisplayName>Invaders.Windows</DisplayName>
+    <DisplayName>Invaders!</DisplayName>
     <PublisherDisplayName>Tom</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -16,7 +16,12 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Invaders.Windows.App">
       <m2:VisualElements DisplayName="Invaders.Windows" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Invaders.Windows" ForegroundText="light" BackgroundColor="#464646">
+        <m2:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+        </m2:DefaultTile>
         <m2:SplashScreen Image="Assets\SplashScreen.png" />
+        <m2:InitialRotationPreference>
+          <m2:Rotation Preference="landscape" />
+        </m2:InitialRotationPreference>
       </m2:VisualElements>
     </Application>
   </Applications>

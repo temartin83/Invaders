@@ -321,6 +321,8 @@ namespace Invaders.Model
                 {
                     Lives--;
                     OnShipChanged(_player, true);
+                    _playerDied = DateTime.Now;
+
                     if (Lives == 0)
                         EndGame();
                     else
